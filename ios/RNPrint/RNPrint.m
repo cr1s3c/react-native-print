@@ -140,7 +140,13 @@ RCT_EXPORT_METHOD(selectPrinter:(NSDictionary *)options
     };
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) { // iPad
-        UIView *view = [[UIApplication sharedApplication] keyWindow].rootViewController.view;
+        UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+        while (topController.presentedViewController) {
+            topController = topController.presentedViewController;
+        }
+        
+        UIView *view = topController.view;
         CGFloat _x = 0;
         CGFloat _y = 0;
         if (options[@"x"]){
