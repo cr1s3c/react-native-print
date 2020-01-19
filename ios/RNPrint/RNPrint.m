@@ -57,7 +57,14 @@ RCT_EXPORT_MODULE();
     if (_pickedPrinter) {
         [printInteractionController printToPrinter:_pickedPrinter completionHandler:completionHandler];
     } else if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) { // iPad
-        UIView *view = [[UIApplication sharedApplication] keyWindow].rootViewController.view;
+        UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+
+        while (topController.presentedViewController) {
+            topController = topController.presentedViewController;
+        }
+        
+        UIView *view = topController.view;
+        
         [printInteractionController presentFromRect:view.frame inView:view animated:YES completionHandler:completionHandler];
     } else { // iPhone
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
